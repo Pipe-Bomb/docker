@@ -50,3 +50,4 @@ volumes:
   api_plugin_cache:
   api_plugins:
   api_temp:
+  api_secrets:
