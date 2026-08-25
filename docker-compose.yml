@@ -13,7 +13,12 @@ services:
     command:
       - sh
       - -c
-      - "mkdir -p /data/database /data/resources /data/cache /data/plugin-cache /data/plugins /data/temp /data/secrets && chown -R 100:101 /data"
+      - >-
+        mkdir -p /data/database /data/resources /data/cache /data/plugin-cache /data/plugins /data/temp /data/secrets &&
+        chown -R 100:101 /data &&
+        chmod 750 /data/database /data/resources /data/cache &&
+        chmod 777 /data/plugins /data/plugin-cache /data/temp &&
+        chmod 700 /data/secrets
     volumes:
       - ${APPDATA_PATH:-./data}:/data
     restart: "no"
