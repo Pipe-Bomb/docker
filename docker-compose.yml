@@ -10,11 +10,10 @@ services:
 
   api-init:
     image: alpine
-    command: >
-      sh -c "mkdir -p
-        /data/database /data/resources /data/cache
-        /data/plugin-cache /data/plugins /data/temp /data/secrets &&
-        chown -R 100:101 /data"
+    command:
+      - sh
+      - -c
+      - "mkdir -p /data/database /data/resources /data/cache /data/plugin-cache /data/plugins /data/temp /data/secrets && chown -R 100:101 /data"
     volumes:
       - ${APPDATA_PATH:-./data}:/data
     restart: "no"
