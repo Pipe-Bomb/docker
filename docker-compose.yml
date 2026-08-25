@@ -8,8 +8,22 @@ services:
       - frontend
     restart: unless-stopped
 
+  api-init:
+    image: alpine
+    command: >
+      sh -c "mkdir -p
+        /data/database /data/resources /data/cache
+        /data/plugin-cache /data/plugins /data/temp /data/secrets &&
+        chown -R 100:101 /data"
+    volumes:
+      - ${APPDATA_PATH:-./data}:/data
+    restart: "no"
+
   api:
     image: ghcr.io/pipe-bomb/server:latest
+    depends_on:
+      api-init:
+        condition: service_completed_successfully
     environment:
       BASE_PATH: /api
       CORS: ${PUBLIC_URL:-http://localhost}
