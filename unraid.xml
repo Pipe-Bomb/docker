@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<ComposeFile>
+  <Name>Pipe Bomb</Name>
+  <Overview>Self-hosted music streaming server. Stream your music library and discover new music through plugins.</Overview>
+  <Category>MediaApp:Music</Category>
+  <WebUI>http://[IP]:[PORT:80]/</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/pipe-bomb/docker/main/unraid.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/pipe-bomb/docker/main/icon.png</Icon>
+  <ExternalLinks>
+    <Link>
+      <Title>GitHub</Title>
+      <URL>https://github.com/pipe-bomb</URL>
+    </Link>
+  </ExternalLinks>
+  <ComposeFile>https://raw.githubusercontent.com/pipe-bomb/docker/main/docker-compose.yml</ComposeFile>
+  <Env>
+    <Variable>
+      <Name>PUBLIC_URL</Name>
+      <Label>Public URL</Label>
+      <Description>The URL you will use to access Pipe Bomb in your browser (e.g. http://192.168.1.100 or http://pipebomb.local). Must match exactly — used for CORS.</Description>
+      <Default>http://192.168.1.100</Default>
+      <Required>true</Required>
+      <Mask>false</Mask>
+    </Variable>
+    <Variable>
+      <Name>HTTP_PORT</Name>
+      <Label>Port</Label>
+      <Description>Port Pipe Bomb will be accessible on.</Description>
+      <Default>80</Default>
+      <Required>false</Required>
+      <Mask>false</Mask>
+    </Variable>
+    <Variable>
+      <Name>APPDATA_PATH</Name>
+      <Label>App Data Path</Label>
+      <Description>Where Pipe Bomb stores its database, plugins, and cache. Defaults to a ./data folder next to the compose file if left blank.</Description>
+      <Default>/mnt/user/appdata/pipe-bomb</Default>
+      <Required>false</Required>
+      <Mask>false</Mask>
+    </Variable>
+    <Variable>
+      <Name>MUSIC_PATH</Name>
+      <Label>Music Library Path</Label>
+      <Description>Path to your local music library for the local-library plugin. Also uncomment the MUSIC_PATH volume line in docker-compose.yml to activate it.</Description>
+      <Default>/mnt/user/Music</Default>
+      <Required>false</Required>
+      <Mask>false</Mask>
+    </Variable>
+    <Variable>
+      <Name>COOKIE_DOMAIN</Name>
+      <Label>Cookie Domain</Label>
+      <Description>Optional. Set to your domain (e.g. mynas.local) if accessing via a hostname so auth cookies scope correctly.</Description>
+      <Default></Default>
+      <Required>false</Required>
+      <Mask>false</Mask>
+    </Variable>
+  </Env>
+</ComposeFile>
