@@ -1,0 +1,52 @@
+services:
+  nginx:
+    image: ghcr.io/pipe-bomb/proxy:latest
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    depends_on:
+      - api
+      - frontend
+    restart: unless-stopped
+
+  api:
+    image: ghcr.io/pipe-bomb/server:latest
+    environment:
+      BASE_PATH: /api
+      CORS: ${PUBLIC_URL:-http://localhost}
+      COOKIE_DOMAIN: ${COOKIE_DOMAIN:-}
+      NODE_ENV: production
+      DB_FILE: /app/data/pipe-bomb.sqlite
+      # PostgreSQL (set DB_TYPE=postgres and fill in the rest to use instead)
+      DB_TYPE: ${DB_TYPE:-sqlite}
+      DB_HOST: ${DB_HOST:-}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_USER: ${DB_USER:-}
+      DB_PASS: ${DB_PASS:-}
+      DB_NAME: ${DB_NAME:-}
+    volumes:
+      - api_data:/app/data
+      - api_resources:/app/resources
+      - api_cache:/app/audio-cache
+      - api_plugin_cache:/app/plugin-cache
+      - api_plugins:/app/plugins
+      - api_temp:/app/temp
+      - api_secrets:/app/.secrets
+      # Bind-mount plugin binaries (yt-dlp, fpcalc, etc.) without rebuilding:
+      # - /path/to/bin:/app/bin
+      # Bind-mount your music library for the local-library plugin:
+      # - /path/to/music:/music:ro
+    restart: unless-stopped
+
+  frontend:
+    image: ghcr.io/pipe-bomb/frontend:latest
+    environment:
+      INTERNAL_API_URL: http://api:3000
+    restart: unless-stopped
+
+volumes:
+  api_data:
+  api_resources:
+  api_cache:
+  api_plugin_cache:
+  api_plugins:
+  api_temp:
