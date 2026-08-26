@@ -40,6 +40,12 @@ services:
           echo "[$$NAME] done"
         }
 
+        install_plugin local-library https://github.com/Pipe-Bomb/local-library-plugin
+        install_plugin chromaprint https://github.com/Pipe-Bomb/chromaprint-plugin
         install_plugin musicbrainz https://github.com/Pipe-Bomb/musicbrainz-plugin
+        install_plugin discogs https://github.com/Pipe-Bomb/discogs-plugin
+        install_plugin fanart-tv https://github.com/pipe-bomb/fanart-tv-plugin
+        install_plugin format https://github.com/Pipe-Bomb/format-plugin
+
     volumes:
       - ${APPDATA_PATH:-./data}/plugins:/plugins
