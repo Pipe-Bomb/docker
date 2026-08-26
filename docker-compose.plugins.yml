@@ -34,8 +34,7 @@ services:
           npm ci --omit=dev --silent
 
           echo "[$$NAME] copying to plugins directory..."
-          mkdir -p "$$TARGET"
-          cp -r dist package.json node_modules "$$TARGET/"
+          cp -r /tmp/$$NAME "$$TARGET"
 
           echo "[$$NAME] done"
         }
