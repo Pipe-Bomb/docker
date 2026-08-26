@@ -13,31 +13,31 @@ services:
         apk add --no-cache git > /dev/null
 
         install_plugin() {
-          NAME=$1
-          REPO=$2
-          TARGET="/plugins/$NAME"
+          NAME=$$1
+          REPO=$$2
+          TARGET="/plugins/$$NAME"
 
-          if [ -d "$TARGET" ]; then
-            echo "[$NAME] already installed, skipping"
+          if [ -d "$$TARGET" ]; then
+            echo "[$$NAME] already installed, skipping"
             return
           fi
 
-          echo "[$NAME] cloning..."
-          git clone --depth=1 "$REPO" /tmp/$NAME
+          echo "[$$NAME] cloning..."
+          git clone --depth=1 "$$REPO" /tmp/$$NAME
 
-          echo "[$NAME] building..."
-          cd /tmp/$NAME
+          echo "[$$NAME] building..."
+          cd /tmp/$$NAME
           npm ci --silent
           npm run build --silent
 
-          echo "[$NAME] installing production dependencies..."
+          echo "[$$NAME] installing production dependencies..."
           npm ci --omit=dev --silent
 
-          echo "[$NAME] copying to plugins directory..."
-          mkdir -p "$TARGET"
-          cp -r dist package.json node_modules "$TARGET/"
+          echo "[$$NAME] copying to plugins directory..."
+          mkdir -p "$$TARGET"
+          cp -r dist package.json node_modules "$$TARGET/"
 
-          echo "[$NAME] done"
+          echo "[$$NAME] done"
         }
 
         install_plugin musicbrainz https://github.com/Pipe-Bomb/musicbrainz-plugin
