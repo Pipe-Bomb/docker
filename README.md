@@ -3,27 +3,15 @@
     Pipe Bomb Docker
 </h1>
 
-Docker Compose setup for running [Pipe Bomb](https://github.com/Pipe-Bomb/server) — includes the API server, frontend, and an nginx reverse proxy that ties them together under a single port.
+Docker Compose setup for running [Pipe Bomb](https://github.com/Pipe-Bomb/server). Includes the API server, frontend, and an Nginx reverse proxy that ties them together under a single port.
 
 ## Getting Started
-
-Copy `.env.example` to `.env` and set `PUBLIC_URL` to the address you'll use to access Pipe Bomb in your browser:
-
-```bash
-cp .env.example .env
-```
-
-```bash
-PUBLIC_URL=http://192.168.1.100
-```
-
-Then start the stack:
 
 ```bash
 docker compose up -d
 ```
 
-Pipe Bomb will be available at the address you set for `PUBLIC_URL`.
+That's it. Pipe Bomb will be available on port 80.
 
 ## Configuration
 
@@ -31,7 +19,7 @@ All configuration is done through the `.env` file.
 
 | Variable       | Default              | Description                                                                                         |
 | :------------- | -------------------- | --------------------------------------------------------------------------------------------------- |
-| `PUBLIC_URL`   | `http://localhost`   | The URL you'll use to access Pipe Bomb in your browser. Must match exactly — used for CORS.         |
+| `PUBLIC_URL`   | _(unset)_            | Only needed if CORS is causing issues. Set to the exact URL you use to access Pipe Bomb (e.g. `http://192.168.1.100`). |
 | `HTTP_PORT`    | `80`                 | The port nginx listens on.                                                                          |
 | `APPDATA_PATH` | `./data`             | Where Pipe Bomb stores its database, plugins, cache, and other persistent data.                     |
 | `MUSIC_PATH`   | _(unset)_            | Path to a local music directory. See [Local Music Library](#local-music-library).                   |
