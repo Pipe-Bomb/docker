@@ -49,7 +49,6 @@ services:
       - ${APPDATA_PATH:-./data}/plugins:/app/plugins
       - ${APPDATA_PATH:-./data}/temp:/app/temp
       - ${APPDATA_PATH:-./data}/secrets:/app/.secrets
-      - "/home/eyezah/Desktop/Test Music:/music:ro"
       # Bind-mount plugin binaries (yt-dlp, fpcalc, etc.) without rebuilding:
       # - /path/to/bin:/app/bin
       # Bind-mount your music library for the local-library plugin:
