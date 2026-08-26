@@ -75,10 +75,6 @@ To install additional plugins, you can either add them to a copy of `docker-comp
 
 The [Pipe Bomb Community](https://github.com/pipe-bomb-community) organisation maintains a [list of official and community plugins](https://github.com/Pipe-Bomb-Community#plugins).
 
-## Unraid
-
-A Compose Manager template is available at `unraid.xml`. You can submit it to [Community Apps](https://unraid.net/community/apps) or load it directly via the Compose Manager plugin.
-
 ## Credits & Contributing
 
 Pipe Bomb is conceptualised and developed by [eyezah](https://github.com/eyezahhhh), but contributions are welcome!
