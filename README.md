@@ -17,27 +17,27 @@ That's it. Pipe Bomb will be available on port 80.
 
 All configuration is done through the `.env` file.
 
-| Variable       | Default              | Description                                                                                         |
-| :------------- | -------------------- | --------------------------------------------------------------------------------------------------- |
-| `PUBLIC_URL`   | _(unset)_            | Only needed if CORS is causing issues. Set to the exact URL you use to access Pipe Bomb (e.g. `http://192.168.1.100`). |
-| `HTTP_PORT`    | `80`                 | The port nginx listens on.                                                                          |
-| `APPDATA_PATH` | `./data`             | Where Pipe Bomb stores its database, plugins, cache, and other persistent data.                     |
-| `MUSIC_PATH`   | _(unset)_            | Path to a local music directory. See [Local Music Library](#local-music-library).                   |
-| `COOKIE_DOMAIN`| _(unset)_            | Set to your hostname (e.g. `mynas.local`) if accessing via a domain so auth cookies scope correctly. |
+| Variable        | Default   | Description                                                                                                            |
+| :-------------- | --------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `PUBLIC_URL`    | _(unset)_ | Only needed if CORS is causing issues. Set to the exact URL you use to access Pipe Bomb (e.g. `http://192.168.1.100`). |
+| `HTTP_PORT`     | `80`      | The port nginx listens on.                                                                                             |
+| `APPDATA_PATH`  | `./data`  | Where Pipe Bomb stores its database, plugins, cache, and other persistent data.                                        |
+| `MUSIC_PATH`    | _(unset)_ | Path to a local music directory. See [Local Music Library](#local-music-library).                                      |
+| `COOKIE_DOMAIN` | _(unset)_ | Set to your hostname (e.g. `mynas.local`) if accessing via a domain so auth cookies scope correctly.                   |
 
 ## Data Storage
 
 All persistent data lives under `APPDATA_PATH` (defaults to `./data`):
 
-| Directory       | Persistent | Description                                                                                                                  |
-| :-------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `database`      | ✅         | The SQLite database. Contains all users, tracks, artists, albums, playlists, etc. Deleting this effectively resets the server. |
-| `resources`     | ✅         | Stores buffer attribute data such as cover art. Clearing this causes all images to disappear until re-fetched.               |
-| `cache`         | 🔶         | Caches processed audio streams. Safe to clear, but audio may be slower to serve until rebuilt.                               |
-| `plugin-cache`  | 🔶         | Stores plugin-specific cached data (e.g. API responses). Safe to clear, but responses will be slower until warmed up again.  |
-| `plugins`       | ✅         | Plugin code. Clearing this removes all installed plugins.                                                                    |
-| `temp`          | ❌         | Temporary files used by plugins during processing. Cleared on server start — does not need to be persisted.                  |
-| `secrets`       | ✅         | Sensitive files used by the server. Should not be cleared.                                                                   |
+| Directory      | Persistent | Description                                                                                                                    |
+| :------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `data`         | ✅         | The SQLite database. Contains all users, tracks, artists, albums, playlists, etc. Deleting this effectively resets the server. |
+| `resources`    | ✅         | Stores buffer attribute data such as cover art. Clearing this causes all images to disappear until re-fetched.                 |
+| `cache`        | 🔶         | Caches processed audio streams. Safe to clear, but audio may be slower to serve until rebuilt.                                 |
+| `plugin-cache` | 🔶         | Stores plugin-specific cached data (e.g. API responses). Safe to clear, but responses will be slower until warmed up again.    |
+| `plugins`      | ✅         | Plugin code. Clearing this removes all installed plugins.                                                                      |
+| `temp`         | ❌         | Temporary files used by plugins during processing. Cleared on server start - does not need to be persisted.                    |
+| `secrets`      | ✅         | Sensitive files used by the server. Should not be cleared.                                                                     |
 
 ## Local Music Library
 
@@ -49,31 +49,6 @@ To expose a local music directory to Pipe Bomb, set `MUSIC_PATH` in your `.env` 
 ```
 
 The [Local Library plugin](https://github.com/Pipe-Bomb/local-library-plugin) will then be able to scan `/music` inside the container.
-
-## Plugins
-
-Plugins are placed in the `plugins` subdirectory of `APPDATA_PATH`. The easiest way to install them automatically is with the provided plugin installer override:
-
-```bash
-docker compose -f docker-compose.yml -f docker-compose.plugins.yml up -d
-```
-
-This runs a one-time installer that clones and builds the following plugins before the server starts:
-
-| Plugin | Purpose |
-| :--- | --- |
-| [Local Library](https://github.com/Pipe-Bomb/local-library-plugin) | Scans a local directory for audio files |
-| [Chromaprint](https://github.com/Pipe-Bomb/chromaprint-plugin) | Generates AcoustID fingerprints for track identification |
-| [MusicBrainz](https://github.com/Pipe-Bomb/musicbrainz-plugin) | Retrieves track, artist & album metadata from MusicBrainz |
-| [Discogs](https://github.com/Pipe-Bomb/discogs-plugin) | Retrieves artist metadata from Discogs |
-| [Fanart.tv](https://github.com/Pipe-Bomb/fanart-tv-plugin) | Retrieves artist images from Fanart.tv |
-| [Format](https://github.com/Pipe-Bomb/format-plugin) | Reads audio codec, bitrate, and sample rate using FFprobe |
-
-Already-installed plugins are skipped on subsequent runs, so it's safe to always include the override.
-
-To install additional plugins, you can either add them to a copy of `docker-compose.plugins.yml` or install them manually by cloning into `APPDATA_PATH/plugins` and running `npm ci && npm run build` inside.
-
-The [Pipe Bomb Community](https://github.com/pipe-bomb-community) organisation maintains a [list of official and community plugins](https://github.com/Pipe-Bomb-Community#plugins).
 
 ## Credits & Contributing
 
