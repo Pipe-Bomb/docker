@@ -1,4 +1,4 @@
-name: Docker (proxy)
+name: Docker (standalone)
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
     tags: ["v*.*.*"]
 
 env:
-  IMAGE: ghcr.io/pipe-bomb/proxy
+  IMAGE: ghcr.io/pipe-bomb/pipe-bomb
 
 jobs:
   build-and-push:
@@ -17,6 +17,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Resolve base image tags
+        id: base-tags
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
+            echo "server_tag=edge" >> $GITHUB_OUTPUT
+            echo "frontend_tag=edge" >> $GITHUB_OUTPUT
+          else
+            echo "server_tag=latest" >> $GITHUB_OUTPUT
+            echo "frontend_tag=latest" >> $GITHUB_OUTPUT
+          fi
 
       - uses: docker/setup-qemu-action@v3
 
@@ -40,14 +51,17 @@ jobs:
             type=semver,pattern={{major}}
             type=raw,value=edge,enable={{is_default_branch}}
           labels: |
-            org.opencontainers.image.description=Pipe Bomb proxy
+            org.opencontainers.image.description=Pipe Bomb
 
       - uses: docker/build-push-action@v5
         with:
-          context: ./nginx
+          context: ./standalone
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            SERVER_TAG=${{ steps.base-tags.outputs.server_tag }}
+            FRONTEND_TAG=${{ steps.base-tags.outputs.frontend_tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

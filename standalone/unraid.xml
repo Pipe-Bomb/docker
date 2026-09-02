@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>Pipe-Bomb</Name>
+  <Repository>ghcr.io/pipe-bomb/pipe-bomb</Repository>
+  <Registry>https://github.com/orgs/pipe-bomb/packages</Registry>
+  <Network>bridge</Network>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+  <Overview>A self-hosted music streaming platform with a plugin system, flexible attribute schema, and an app-quality client. This is the all-in-one image — the API server, frontend, and nginx proxy all run inside a single container.</Overview>
+  <Category>MediaApp:Music</Category>
+  <WebUI>http://[IP]:[PORT:80]/</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/pipe-bomb/community-scripts/master/unraid.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/Pipe-Bomb/.github/refs/heads/master/assets/logos/Pipe%20Bomb%20no%20background.png</Icon>
+  <Branch>
+    <Tag>latest</Tag>
+    <TagDescription>Stable release. Recommended for most users.</TagDescription>
+  </Branch>
+  <Branch>
+    <Tag>edge</Tag>
+    <TagDescription>Bleeding edge build from the master branch. May be unstable.</TagDescription>
+  </Branch>
+  <ExtraParams/>
+  <PostArgs/>
+  <DateInstalled/>
+  <ExternalLinks>
+    <Link>
+      <Title>GitHub</Title>
+      <URL>https://github.com/pipe-bomb</URL>
+    </Link>
+    <Link>
+      <Title>Website</Title>
+      <URL>https://pipebomb.net</URL>
+    </Link>
+  </ExternalLinks>
+  <Config Name="Web Port" Target="80" Default="9193" Mode="tcp" Description="Port Pipe Bomb will be accessible on." Type="Port" Display="always" Required="true" Mask="false">9193</Config>
+  <Config Name="Data Path" Target="/data" Default="/mnt/user/appdata/pipe-bomb/data" Mode="rw" Description="Where Pipe Bomb stores its database and core data." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/pipe-bomb/data</Config>
+  <Config Name="Resources Path" Target="/resources" Default="/mnt/user/appdata/pipe-bomb/resources" Mode="rw" Description="Where Pipe Bomb stores resources such as album art and thumbnails." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/pipe-bomb/resources</Config>
+  <Config Name="Audio Cache Path" Target="/audio-cache" Default="/mnt/cache/appdata/pipe-bomb/cache" Mode="rw" Description="Where Pipe Bomb caches audio files. Recommended to place on a fast drive (e.g. your cache pool)." Type="Path" Display="always" Required="true" Mask="false">/mnt/cache/appdata/pipe-bomb/cache</Config>
+  <Config Name="Plugin Cache Path" Target="/plugin-cache" Default="/mnt/user/appdata/pipe-bomb/plugin-cache" Mode="rw" Description="Where Pipe Bomb stores plugin-related cache files." Type="Path" Display="always" Required="false" Mask="false">/mnt/user/appdata/pipe-bomb/plugin-cache</Config>
+  <Config Name="Plugins Path" Target="/plugins" Default="/mnt/user/appdata/pipe-bomb/plugins" Mode="rw" Description="Where Pipe Bomb loads plugins from." Type="Path" Display="always" Required="false" Mask="false">/mnt/user/appdata/pipe-bomb/plugins</Config>
+  <Config Name="Temp Path" Target="/temp" Default="/mnt/user/appdata/pipe-bomb/temp" Mode="rw" Description="Where Pipe Bomb writes temporary files. Can safely point to fast or ephemeral storage." Type="Path" Display="always" Required="false" Mask="false">/mnt/user/appdata/pipe-bomb/temp</Config>
+  <Config Name="Secrets Path" Target="/.secrets" Default="/mnt/user/appdata/pipe-bomb/secrets" Mode="rw" Description="Where Pipe Bomb stores secrets such as the JWT signing key. Keep this on persistent storage." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/pipe-bomb/secrets</Config>
+  <Config Name="Music Library Path" Target="/music" Default="/mnt/user/Music" Mode="ro" Description="Path to your local music library for the local-library plugin." Type="Path" Display="always" Required="false" Mask="false">/mnt/user/Music</Config>
+  <Config Name="Public URL" Target="CORS" Default="" Mode="" Description="Only needed if CORS is causing issues. Set to the exact URL you use to access Pipe Bomb (e.g. http://192.168.1.100 or http://pipebomb.local)." Type="Variable" Display="always" Required="false" Mask="false"></Config>
+</Container>
