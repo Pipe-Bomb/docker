@@ -11,44 +11,42 @@ Docker Compose setup for running [Pipe Bomb](https://github.com/Pipe-Bomb/server
 docker compose up -d
 ```
 
-That's it. Pipe Bomb will be available on port 80.
+That's it. Pipe Bomb will be available on port 9193.
 
 ## Configuration
 
 All configuration is done through the `.env` file.
 
-| Variable        | Default   | Description                                                                                                            |
-| :-------------- | --------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `PUBLIC_URL`    | _(unset)_ | Only needed if CORS is causing issues. Set to the exact URL you use to access Pipe Bomb (e.g. `http://192.168.1.100`). |
-| `HTTP_PORT`     | `80`      | The port nginx listens on.                                                                                             |
-| `APPDATA_PATH`  | `./data`  | Where Pipe Bomb stores its database, plugins, cache, and other persistent data.                                        |
-| `MUSIC_PATH`    | _(unset)_ | Path to a local music directory. See [Local Music Library](#local-music-library).                                      |
-| `COOKIE_DOMAIN` | _(unset)_ | Set to your hostname (e.g. `mynas.local`) if accessing via a domain so auth cookies scope correctly.                   |
+| Variable            | Default               | Description                                                                                                            |
+| :------------------ | --------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `PUBLIC_URL`        | _(unset)_             | Only needed if CORS is causing issues. Set to the exact URL you use to access Pipe Bomb (e.g. `http://192.168.1.100`). |
+| `HTTP_PORT`         | `9193`                | The port nginx listens on.                                                                                             |
+| `DATA_PATH`         | `./data/data`         | Where Pipe Bomb stores its database and core data.                                                                     |
+| `RESOURCES_PATH`    | `./data/resources`    | Where Pipe Bomb stores resources such as cover art and thumbnails.                                                     |
+| `AUDIO_CACHE_PATH`  | `./data/cache`        | Where Pipe Bomb caches audio streams. Safe to clear; audio will be slower to serve until rebuilt.                      |
+| `PLUGIN_CACHE_PATH` | `./data/plugin-cache` | Where Pipe Bomb stores plugin-specific cached data. Safe to clear.                                                     |
+| `PLUGINS_PATH`      | `./data/plugins`      | Where Pipe Bomb loads plugins from.                                                                                    |
+| `TEMP_PATH`         | `./data/temp`         | Temporary files used during processing. Does not need to be persisted.                                                 |
+| `SECRETS_PATH`      | `./data/secrets`      | JWT signing key and other secrets. Must be kept on persistent storage.                                                 |
+| `MUSIC_PATH`        | `./data/music`        | Path to a local music directory. See [Local Music Library](#local-music-library).                                      |
 
 ## Data Storage
 
-All persistent data lives under `APPDATA_PATH` (defaults to `./data`):
+Each data path can be configured independently via the variables above. Here's what each one stores:
 
-| Directory      | Persistent | Description                                                                                                                    |
-| :------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `data`         | ✅         | The SQLite database. Contains all users, tracks, artists, albums, playlists, etc. Deleting this effectively resets the server. |
-| `resources`    | ✅         | Stores buffer attribute data such as cover art. Clearing this causes all images to disappear until re-fetched.                 |
-| `cache`        | 🔶         | Caches processed audio streams. Safe to clear, but audio may be slower to serve until rebuilt.                                 |
-| `plugin-cache` | 🔶         | Stores plugin-specific cached data (e.g. API responses). Safe to clear, but responses will be slower until warmed up again.    |
-| `plugins`      | ✅         | Plugin code. Clearing this removes all installed plugins.                                                                      |
-| `temp`         | ❌         | Temporary files used by plugins during processing. Cleared on server start - does not need to be persisted.                    |
-| `secrets`      | ✅         | Sensitive files used by the server. Should not be cleared.                                                                     |
+| Variable            | Persistent | Description                                                                                                                    |
+| :------------------ | ---------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `DATA_PATH`         | ✅         | The SQLite database. Contains all users, tracks, artists, albums, playlists, etc. Deleting this effectively resets the server. |
+| `RESOURCES_PATH`    | ✅         | Stores buffer attribute data such as cover art. Clearing this causes all images to disappear until re-fetched.                 |
+| `AUDIO_CACHE_PATH`  | 🔶         | Caches processed audio streams. Safe to clear, but audio may be slower to serve until rebuilt.                                 |
+| `PLUGIN_CACHE_PATH` | 🔶         | Stores plugin-specific cached data (e.g. API responses). Safe to clear, but responses will be slower until warmed up again.    |
+| `PLUGINS_PATH`      | ✅         | Plugin code. Clearing this removes all installed plugins.                                                                      |
+| `TEMP_PATH`         | ❌         | Temporary files used by plugins during processing. Cleared on server start - does not need to be persisted.                    |
+| `SECRETS_PATH`      | ✅         | Sensitive files used by the server. Should not be cleared.                                                                     |
 
 ## Local Music Library
 
-To expose a local music directory to Pipe Bomb, set `MUSIC_PATH` in your `.env` and uncomment the corresponding volume line in `docker-compose.yml`:
-
-```yaml
-# Bind-mount your music library for the local-library plugin:
-- ${MUSIC_PATH:-/path/to/music}:/music:ro
-```
-
-The [Local Library plugin](https://github.com/Pipe-Bomb/local-library-plugin) will then be able to scan `/music` inside the container.
+To expose a local music directory to Pipe Bomb, set `MUSIC_PATH` in your `.env` to the path of your music folder. The [Local Library plugin](https://github.com/Pipe-Bomb/local-library-plugin) will then be able to scan `/music` inside the container.
 
 ## Credits & Contributing
 

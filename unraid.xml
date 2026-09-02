@@ -21,9 +21,9 @@
     <Variable>
       <Name>PUBLIC_URL</Name>
       <Label>Public URL</Label>
-      <Description>The URL you will use to access Pipe Bomb in your browser (e.g. http://192.168.1.100 or http://pipebomb.local). Must match exactly — used for CORS.</Description>
-      <Default>http://192.168.1.100</Default>
-      <Required>true</Required>
+      <Description>Only needed if CORS is causing issues. Set to the exact URL you use to access Pipe Bomb (e.g. http://192.168.1.100 or http://pipebomb.local).</Description>
+      <Default></Default>
+      <Required>false</Required>
       <Mask>false</Mask>
     </Variable>
     <Variable>

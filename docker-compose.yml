@@ -37,7 +37,6 @@ services:
     environment:
       BASE_PATH: /api
       CORS: ${PUBLIC_URL:-}
-      COOKIE_DOMAIN: ${COOKIE_DOMAIN:-}
       NODE_ENV: production
       DB_FILE: /app/data/pipe-bomb.sqlite
     volumes:

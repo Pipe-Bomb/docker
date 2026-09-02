@@ -3,7 +3,7 @@ name: Docker (proxy)
 on:
   push:
     branches: [master]
-    tags: ['v*.*.*']
+    tags: ["v*.*.*"]
 
 env:
   IMAGE: ghcr.io/pipe-bomb/proxy
@@ -27,7 +27,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v5
