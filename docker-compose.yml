@@ -2,7 +2,7 @@ services:
   nginx:
     image: ghcr.io/pipe-bomb/proxy:latest
     ports:
-      - "${HTTP_PORT:-80}:80"
+      - "${HTTP_PORT:-9193}:80"
     depends_on:
       - api
       - frontend
@@ -14,13 +14,19 @@ services:
       - sh
       - -c
       - >-
-        mkdir -p /data/data /data/resources /data/cache /data/plugin-cache /data/plugins /data/temp /data/secrets &&
-        chown -R 100:101 /data &&
-        chmod 750 /data/data /data/resources /data/cache &&
-        chmod 777 /data/plugins /data/plugin-cache /data/temp &&
-        chmod 700 /data/secrets
+        mkdir -p /data /resources /cache /plugin-cache /plugins /temp /secrets &&
+        chown 100:101 /data /resources /cache /plugin-cache /plugins /temp /secrets &&
+        chmod 750 /data /resources /cache &&
+        chmod 777 /plugins /plugin-cache /temp &&
+        chmod 700 /secrets
     volumes:
-      - ${APPDATA_PATH:-./data}:/data
+      - ${DATA_PATH:-./data/data}:/data
+      - ${RESOURCES_PATH:-./data/resources}:/resources
+      - ${AUDIO_CACHE_PATH:-./data/cache}:/cache
+      - ${PLUGIN_CACHE_PATH:-./data/plugin-cache}:/plugin-cache
+      - ${PLUGINS_PATH:-./data/plugins}:/plugins
+      - ${TEMP_PATH:-./data/temp}:/temp
+      - ${SECRETS_PATH:-./data/secrets}:/secrets
     restart: "no"
 
   api:
@@ -34,25 +40,15 @@ services:
       COOKIE_DOMAIN: ${COOKIE_DOMAIN:-}
       NODE_ENV: production
       DB_FILE: /app/data/pipe-bomb.sqlite
-      # PostgreSQL (set DB_TYPE=postgres and fill in the rest to use instead)
-      DB_TYPE: ${DB_TYPE:-sqlite}
-      DB_HOST: ${DB_HOST:-}
-      DB_PORT: ${DB_PORT:-5432}
-      DB_USER: ${DB_USER:-}
-      DB_PASS: ${DB_PASS:-}
-      DB_NAME: ${DB_NAME:-}
     volumes:
-      - ${APPDATA_PATH:-./data}/data:/app/data
-      - ${APPDATA_PATH:-./data}/resources:/app/resources
-      - ${APPDATA_PATH:-./data}/cache:/app/audio-cache
-      - ${APPDATA_PATH:-./data}/plugin-cache:/app/plugin-cache
-      - ${APPDATA_PATH:-./data}/plugins:/app/plugins
-      - ${APPDATA_PATH:-./data}/temp:/app/temp
-      - ${APPDATA_PATH:-./data}/secrets:/app/.secrets
-      # Bind-mount plugin binaries (yt-dlp, fpcalc, etc.) without rebuilding:
-      # - /path/to/bin:/app/bin
-      # Bind-mount your music library for the local-library plugin:
-      # - ${MUSIC_PATH:-/path/to/music}:/music:ro
+      - ${DATA_PATH:-./data/data}:/app/data
+      - ${RESOURCES_PATH:-./data/resources}:/app/resources
+      - ${AUDIO_CACHE_PATH:-./data/cache}:/app/audio-cache
+      - ${PLUGIN_CACHE_PATH:-./data/plugin-cache}:/app/plugin-cache
+      - ${PLUGINS_PATH:-./data/plugins}:/app/plugins
+      - ${TEMP_PATH:-./data/temp}:/app/temp
+      - ${SECRETS_PATH:-./data/secrets}:/app/.secrets
+      - ${MUSIC_PATH:-./data/music}:/music:ro
     restart: unless-stopped
 
   frontend:

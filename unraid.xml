@@ -1,18 +1,22 @@
 <?xml version="1.0"?>
 <ComposeFile>
   <Name>Pipe Bomb</Name>
-  <Overview>Self-hosted music streaming server. Stream your music library and discover new music through plugins.</Overview>
+  <Overview>A self-hosted music streaming platform with a plugin system, flexible attribute schema, and an app-quality client.</Overview>
   <Category>MediaApp:Music</Category>
   <WebUI>http://[IP]:[PORT:80]/</WebUI>
-  <TemplateURL>https://raw.githubusercontent.com/pipe-bomb/docker/main/unraid.xml</TemplateURL>
-  <Icon>https://raw.githubusercontent.com/pipe-bomb/docker/main/icon.png</Icon>
+  <TemplateURL>https://raw.githubusercontent.com/pipe-bomb/docker/master/unraid.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/Pipe-Bomb/.github/refs/heads/master/assets/logos/Pipe%20Bomb%20no%20background.png</Icon>
   <ExternalLinks>
     <Link>
       <Title>GitHub</Title>
       <URL>https://github.com/pipe-bomb</URL>
     </Link>
+    <Link>
+      <Title>Website</Title>
+      <URL>https://pipebomb.net</URL>
+    </Link>
   </ExternalLinks>
-  <ComposeFile>https://raw.githubusercontent.com/pipe-bomb/docker/main/docker-compose.yml</ComposeFile>
+  <ComposeFile>https://raw.githubusercontent.com/pipe-bomb/docker/master/docker-compose.yml</ComposeFile>
   <Env>
     <Variable>
       <Name>PUBLIC_URL</Name>
@@ -31,26 +35,66 @@
       <Mask>false</Mask>
     </Variable>
     <Variable>
-      <Name>APPDATA_PATH</Name>
-      <Label>App Data Path</Label>
-      <Description>Where Pipe Bomb stores its database, plugins, and cache. Defaults to a ./data folder next to the compose file if left blank.</Description>
-      <Default>/mnt/user/appdata/pipe-bomb</Default>
+      <Name>DATA_PATH</Name>
+      <Label>Data Path</Label>
+      <Description>Where Pipe Bomb stores its database and core data.</Description>
+      <Default>/mnt/user/appdata/pipe-bomb/data</Default>
+      <Required>false</Required>
+      <Mask>false</Mask>
+    </Variable>
+    <Variable>
+      <Name>RESOURCES_PATH</Name>
+      <Label>Resources Path</Label>
+      <Description>Where Pipe Bomb stores resources such as album art and thumbnails.</Description>
+      <Default>/mnt/user/appdata/pipe-bomb/resources</Default>
+      <Required>false</Required>
+      <Mask>false</Mask>
+    </Variable>
+    <Variable>
+      <Name>AUDIO_CACHE_PATH</Name>
+      <Label>Audio Cache Path</Label>
+      <Description>Where Pipe Bomb caches audio files. Recommended to place on a fast drive (e.g. your cache pool).</Description>
+      <Default>/mnt/cache/appdata/pipe-bomb/cache</Default>
+      <Required>false</Required>
+      <Mask>false</Mask>
+    </Variable>
+    <Variable>
+      <Name>PLUGIN_CACHE_PATH</Name>
+      <Label>Plugin Cache Path</Label>
+      <Description>Where Pipe Bomb stores plugin-related cache files.</Description>
+      <Default>/mnt/user/appdata/pipe-bomb/plugin-cache</Default>
+      <Required>false</Required>
+      <Mask>false</Mask>
+    </Variable>
+    <Variable>
+      <Name>PLUGINS_PATH</Name>
+      <Label>Plugins Path</Label>
+      <Description>Where Pipe Bomb loads plugins from.</Description>
+      <Default>/mnt/user/appdata/pipe-bomb/plugins</Default>
+      <Required>false</Required>
+      <Mask>false</Mask>
+    </Variable>
+    <Variable>
+      <Name>TEMP_PATH</Name>
+      <Label>Temp Path</Label>
+      <Description>Where Pipe Bomb writes temporary files. Can safely point to fast or ephemeral storage.</Description>
+      <Default>/mnt/user/appdata/pipe-bomb/temp</Default>
+      <Required>false</Required>
+      <Mask>false</Mask>
+    </Variable>
+    <Variable>
+      <Name>SECRETS_PATH</Name>
+      <Label>Secrets Path</Label>
+      <Description>Where Pipe Bomb stores secrets such as the JWT signing key. Keep this on persistent storage.</Description>
+      <Default>/mnt/user/appdata/pipe-bomb/secrets</Default>
       <Required>false</Required>
       <Mask>false</Mask>
     </Variable>
     <Variable>
       <Name>MUSIC_PATH</Name>
       <Label>Music Library Path</Label>
-      <Description>Path to your local music library for the local-library plugin. Also uncomment the MUSIC_PATH volume line in docker-compose.yml to activate it.</Description>
+      <Description>Path to your local music library for the local-library plugin.</Description>
       <Default>/mnt/user/Music</Default>
-      <Required>false</Required>
-      <Mask>false</Mask>
-    </Variable>
-    <Variable>
-      <Name>COOKIE_DOMAIN</Name>
-      <Label>Cookie Domain</Label>
-      <Description>Optional. Set to your domain (e.g. mynas.local) if accessing via a hostname so auth cookies scope correctly.</Description>
-      <Default></Default>
       <Required>false</Required>
       <Mask>false</Mask>
     </Variable>
