@@ -7,15 +7,23 @@ Docker Compose setup for running [Pipe Bomb](https://github.com/Pipe-Bomb/server
 
 ## Getting Started
 
+### Docker Compose (recommended)
+
+Suitable for Linux servers or any platform with Docker Compose support.
+
+Download [docker-compose.yml](https://raw.githubusercontent.com/Pipe-Bomb/docker/master/docker-compose.yml):
+
+```bash
+curl -o docker-compose.yml https://raw.githubusercontent.com/Pipe-Bomb/docker/master/docker-compose.yml
+```
+
+And run it!
+
 ```bash
 docker compose up -d
 ```
 
-That's it. Pipe Bomb will be available on port 9193.
-
-## Configuration
-
-All configuration is done through the `.env` file.
+That's it. Pipe Bomb will be available by default on port 9193. You can configure Pipe Bomb under Docker Compose using the following environment variables:
 
 | Variable            | Default               | Description                                                                                                            |
 | :------------------ | --------------------- | ---------------------------------------------------------------------------------------------------------------------- |
@@ -30,19 +38,38 @@ All configuration is done through the `.env` file.
 | `SECRETS_PATH`      | `./data/secrets`      | JWT signing key and other secrets. Must be kept on persistent storage.                                                 |
 | `MUSIC_PATH`        | `./data/music`        | Path to a local music directory. See [Local Music Library](#local-music-library).                                      |
 
+### Single container
+
+Suitable for Unraid, Portainer, and platforms without Docker Compose support.
+
+```bash
+docker run -d \
+  --name pipe-bomb \
+  -p 9193:80 \
+  -v /path/to/data:/data \
+  -v /path/to/resources:/resources \
+  -v /path/to/cache:/audio-cache \
+  -v /path/to/plugin-cache:/plugin-cache \
+  -v /path/to/plugins:/plugins \
+  -v /path/to/temp:/temp \
+  -v /path/to/music:/music:ro \
+  ghcr.io/pipe-bomb/pipe-bomb:latest
+```
+
 ## Data Storage
 
-Each data path can be configured independently via the variables above. Here's what each one stores:
+Each volume path can be configured independently regardless of how you install your Pipe Bomb. Here's what each one stores:
 
-| Variable            | Persistent | Description                                                                                                                    |
-| :------------------ | ---------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `DATA_PATH`         | ✅         | The SQLite database. Contains all users, tracks, artists, albums, playlists, etc. Deleting this effectively resets the server. |
-| `RESOURCES_PATH`    | ✅         | Stores buffer attribute data such as cover art. Clearing this causes all images to disappear until re-fetched.                 |
-| `AUDIO_CACHE_PATH`  | 🔶         | Caches processed audio streams. Safe to clear, but audio may be slower to serve until rebuilt.                                 |
-| `PLUGIN_CACHE_PATH` | 🔶         | Stores plugin-specific cached data (e.g. API responses). Safe to clear, but responses will be slower until warmed up again.    |
-| `PLUGINS_PATH`      | ✅         | Plugin code. Clearing this removes all installed plugins.                                                                      |
-| `TEMP_PATH`         | ❌         | Temporary files used by plugins during processing. Cleared on server start - does not need to be persisted.                    |
-| `SECRETS_PATH`      | ✅         | Sensitive files used by the server. Should not be cleared.                                                                     |
+| Volume         | Persistent | Description                                                                                                                    |
+| :------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `data`         | ✅         | The SQLite database. Contains all users, tracks, artists, albums, playlists, etc. Deleting this effectively resets the server. |
+| `resources`    | ✅         | Stores buffer attribute data such as cover art. Clearing this causes all images to disappear until re-fetched.                 |
+| `audio-cache`  | 🔶         | Caches processed audio streams. Safe to clear, but audio may be slower to serve until rebuilt.                                 |
+| `plugin-cache` | 🔶         | Stores plugin-specific cached data (e.g. API responses). Safe to clear, but responses will be slower until warmed up again.    |
+| `plugins`      | ✅         | Plugin code. Clearing this removes all installed plugins.                                                                      |
+| `temp`         | ❌         | Temporary files used by plugins during processing. Cleared on server start - does not need to be persisted.                    |
+| `secrets`      | ✅         | Sensitive files used by the server. Should not be cleared.                                                                     |
+| `music`        | ✅         | Example volume for passing through local music files. Should not be cleared.                                                   |
 
 ## Local Music Library
 

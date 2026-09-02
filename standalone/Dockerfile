@@ -34,6 +34,6 @@ ENV NODE_ENV=production \
 
 VOLUME ["/data", "/resources", "/audio-cache", "/plugin-cache", "/plugins", "/temp", "/.secrets", "/music"]
 
-EXPOSE 80
+EXPOSE 9193
 
 ENTRYPOINT ["/entrypoint.sh"]

@@ -2,7 +2,7 @@ services:
   nginx:
     image: ghcr.io/pipe-bomb/proxy:latest
     ports:
-      - "${HTTP_PORT:-9193}:80"
+      - "${HTTP_PORT:-9193}:9193"
     depends_on:
       - api
       - frontend
