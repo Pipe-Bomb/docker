@@ -1,6 +1,16 @@
 name: Docker (standalone)
 
 on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Tag to build and push
+        required: true
+        default: edge
+        type: choice
+        options: [edge, latest]
+  repository_dispatch:
+    types: [base-image-updated]
   push:
     branches: [master]
     tags: ["v*.*.*"]
@@ -21,13 +31,18 @@ jobs:
       - name: Resolve base image tags
         id: base-tags
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
-            echo "server_tag=edge" >> $GITHUB_OUTPUT
-            echo "frontend_tag=edge" >> $GITHUB_OUTPUT
+          if [[ "${{ github.event_name }}" == "repository_dispatch" ]]; then
+            TAG="${{ github.event.client_payload.tag }}"
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            TAG="${{ github.event.inputs.tag }}"
+          elif [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
+            TAG="edge"
           else
-            echo "server_tag=latest" >> $GITHUB_OUTPUT
-            echo "frontend_tag=latest" >> $GITHUB_OUTPUT
+            TAG="latest"
           fi
+          echo "server_tag=$TAG" >> $GITHUB_OUTPUT
+          echo "frontend_tag=$TAG" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
 
       - uses: docker/setup-qemu-action@v3
 
@@ -49,7 +64,8 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
-            type=raw,value=edge,enable={{is_default_branch}}
+            type=raw,value=edge,enable=${{ (github.event_name == 'push' && github.ref == 'refs/heads/master') || steps.base-tags.outputs.tag == 'edge' }}
+            type=raw,value=latest,enable=${{ steps.base-tags.outputs.tag == 'latest' && github.event_name != 'push' }}
           labels: |
             org.opencontainers.image.description=Pipe Bomb
 
