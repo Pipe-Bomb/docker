@@ -11,9 +11,6 @@ on:
         options: [edge, latest]
   repository_dispatch:
     types: [base-image-updated]
-  push:
-    branches: [master]
-    tags: ["v*.*.*"]
 
 env:
   IMAGE: ghcr.io/pipe-bomb/pipe-bomb
