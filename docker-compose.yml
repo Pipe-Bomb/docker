@@ -30,7 +30,7 @@ services:
         condition: service_completed_successfully
     environment:
       BASE_PATH: /api
-      CORS: ${PUBLIC_URL:-http://localhost}
+      CORS: ${PUBLIC_URL:-}
       COOKIE_DOMAIN: ${COOKIE_DOMAIN:-}
       NODE_ENV: production
       DB_FILE: /app/data/pipe-bomb.sqlite
