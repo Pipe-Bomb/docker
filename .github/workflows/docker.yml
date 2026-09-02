@@ -1,8 +1,12 @@
-name: Docker
+name: Docker (proxy)
 
 on:
   push:
     branches: [master]
+    tags: ['v*.*.*']
+
+env:
+  IMAGE: ghcr.io/pipe-bomb/proxy
 
 jobs:
   build-and-push:
@@ -23,10 +27,27 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE }}
+          flavor: latest=auto
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=raw,value=edge,enable={{is_default_branch}}
+          labels: |
+            org.opencontainers.image.description=Pipe Bomb proxy
 
       - uses: docker/build-push-action@v5
         with:
           context: ./nginx
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ghcr.io/pipe-bomb/proxy:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
