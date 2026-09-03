@@ -32,7 +32,7 @@ ENV NODE_ENV=production \
 	BASE_PATH=/api \
 	CORS=""
 
-VOLUME ["/data", "/resources", "/audio-cache", "/plugin-cache", "/plugins", "/temp", "/.secrets", "/music"]
+VOLUME ["/data", "/srv/api/resources", "/srv/api/audio-cache", "/srv/api/plugin-cache", "/srv/api/plugins", "/srv/api/temp", "/srv/api/.secrets", "/music"]
 
 EXPOSE 9193
 
