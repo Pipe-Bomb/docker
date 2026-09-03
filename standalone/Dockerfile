@@ -28,7 +28,7 @@ RUN chmod +x /entrypoint.sh
 
 ENV NODE_ENV=production \
 	DB_FILE=/data/pipe-bomb.sqlite \
-	PLUGIN_DIRECTORY=/plugins \
+	PLUGIN_DIRECTORY=/srv/api/plugins \
 	BASE_PATH=/api \
 	CORS=""
 
